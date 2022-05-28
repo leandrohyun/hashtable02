@@ -5,10 +5,27 @@ Além disso, esse método poderá ser utilizado em outros serviços, como bombei
  cada um com seus dados próprios sendo importante para um bom gerenciamento dentro da cidade jogada.
 */
 
-import { defaultToString } from '../util';
-import { ValuePair } from './models/value-pair';
+function defaultToString(item) {
+  if (item === null) {
+    return 'NULL';
+  } else if (item === undefined) {
+    return 'UNDEFINED';
+  } else if (typeof item === 'string' || item instanceof String) {
+    return `${item}`;
+  }
+  return item.toString();
+}
+class ValuePair {
+  constructor(key, value) {
+    this.key = key;
+    this.value = value;
+  }
+  toString() {
+    return `[#${this.key}: ${this.value}]`;
+  }
+}
 
-export default class HashTableLinearProbing {
+class HashTableLinearProbing {
   constructor(toStrFn = defaultToString) {
     this.toStrFn = toStrFn;
     this.table = {};
@@ -118,3 +135,23 @@ export default class HashTableLinearProbing {
     return objString;
   }
 }
+
+//put
+const x = new HashTableLinearProbing();
+    x.put("Hospital Hanguk", "102 pacientes")
+    x.put("Hospital Chicago", "72 pacientes");
+    x.put("Hospital Wang", "38 pacientes");
+    x.put("Hospital Ilsan ", "15 pacientes");
+    x.put("Hospital Gyeongju", "22 pacientes")
+    x.put("Hospital Nagano", "28 pacientes")
+    x.put("Hospital Myshuno", "28 pacientes")
+    x.put("Hospital Nanjun", "55 pacientes")
+console.log(x);
+
+//get
+console.log(x.get("Hospital Chicago"));
+
+//remove
+
+x.remove("Hospital Gyeongju");
+console.log(x);
