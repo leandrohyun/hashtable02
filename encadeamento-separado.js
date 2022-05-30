@@ -4,11 +4,59 @@ Hash table será usado para armazenar os dados, nesse caso, o número de pacient
 Além disso, esse método poderá ser utilizado em outros serviços, como bombeiros, polícia e transporte,
  cada um com seus dados próprios sendo importante para um bom gerenciamento dentro da cidade jogada.
 */
-import { defaultToString } from '../util';
-import LinkedList from './linked-list';
-import { ValuePair } from './models/value-pair';
 
-export default class HashTableSeparateChaining {
+function defaultToString(item) {
+  if (item === null) {
+    return 'NULL';
+  } else if (item === undefined) {
+    return 'UNDEFINED';
+  } else if (typeof item === 'string' || item instanceof String) {
+    return `${item}`;
+  }
+  return item.toString();
+}
+class ValuePair {
+  constructor(key, value) {
+    this.key = key;
+    this.value = value;
+  }
+  toString() {
+    return `[#${this.key}: ${this.value}]`;
+  }
+}
+class Node {
+  constructor(element, next) {
+    this.element = element;
+    this.next = next;
+  }
+}
+function defaultEquals(a, b) {
+  return a === b;
+}
+
+class LinkedList {
+constructor(equalsFn = defaultEquals) {
+  this.equalsFn = equalsFn;
+  this.count = 0;
+  this.head = undefined;
+}
+push(element) {
+  const node = new Node(element);
+  let current;
+  if (this.head == null) {
+    this.head = node;
+  } else {
+    current = this.head;
+    while (current.next != null) {
+      current = current.next;
+    }
+    current.next = node;
+  }
+  this.count++;
+}
+}
+
+class HashTableSeparateChaining {
   constructor(toStrFn = defaultToString) {
     this.toStrFn = toStrFn;
     this.table = {};
@@ -40,9 +88,9 @@ export default class HashTableSeparateChaining {
   }
   get(key) {
     const position = this.hashCode(key);
-    const linkedList = this.table[position];
-    if (linkedList != null && !linkedList.isEmpty()) {
-      let current = linkedList.getHead();
+    const LinkedList = this.table[position];
+    if (LinkedList != null && !LinkedList.isEmpty()) {
+      let current = LinkedList.getHead();
       while (current != null) {
         if (current.element.key === key) {
           return current.element.value;
@@ -100,3 +148,25 @@ export default class HashTableSeparateChaining {
     return objString;
   }
 }
+
+
+//put 
+
+const x = new HashTableSeparateChaining();
+    x.put("Hospital Hanguk", "102 pacientes")
+    x.put("Hospital Chicago", "72 pacientes");
+    x.put("Hospital Wang", "38 pacientes");
+    x.put("Hospital Ilsan ", "15 pacientes");
+    x.put("Hospital Gyeongju", "22 pacientes")
+    x.put("Hospital Nagano", "28 pacientes")
+    x.put("Hospital Myshuno", "28 pacientes")
+    x.put("Hospital Nanjun", "55 pacientes")
+console.log(x);
+
+//get
+
+console.log(x.get("Hospital Hanguk"));
+
+//remove
+x.remove("Hospital Wang");
+console.log(x);
